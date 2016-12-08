@@ -29,13 +29,20 @@ In order to use this SDK, a Quikkly app key is required. Visit [here](https://de
 
 ### Gradle
 
-To install the SDK simply add our repository to your build.gradle file:
-
+To install the SDK simply add our repositories to your build.gradle file:
+```
+Release
 repositories {
-    maven { url 'https://developers.quikkly.io/nexus/content/repositories/maven-snapshots/' }
+    maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
 }
-
-Then add the following 3 core components to start using Quikkly:
+```
+```
+Snapshot
+repositories {
+    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
+}
+```
+Then add the following 3 core components (Snapshot only available at this time) to start using Quikkly:
 
 ```
 dependencies {
@@ -50,7 +57,7 @@ dependencies {
 Additionally you may choose to use our ready packaged Scanning View, in which case simply add the folloing dependancy to your build.gradle.
 
 ```
-compile('net.quikkly.android:render-lib:0.9.0-SNAPSHOT@aar')
+compile('net.quikkly.android:scanning-sdk-ui:0.9.0-SNAPSHOT@aar')
 ```
 
 Some parts of the SDK require additional libraries that are either not available via online repositories or we cannot distribute directly to you. Below is the list of optional libraries that you must provide yourself.
@@ -120,9 +127,9 @@ For instance:
 Skin mySkin = new Skin();
 ```
 
-The Skin object has properties which can be set - Border, Code, Background colour and also the URL of the image you wish to place in the centre. Please see the [Skin](https://developers.quikkly.io/placeholder) object's Javadocs for more details.
+The Skin object has properties which can be set - Border, Code, Background colour and also the URL of the image you wish to place in the centre. Please see the [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) object's Javadocs for more details.
 
-Then it can be passed as a parameter of the generateActionTag method in the NewActionTagRequest interface. The skin can be nil as it will then use the default skin provided by the Quikkly platform, but you are able to use the 
+Then it can be passed as a parameter of the generateActionTag method in the NewActionTagRequest interface. The skin can be nil as it will then use the default [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) provided by the Quikkly platform, but you are able to use the 
 
 ```
 Symbol scannable = NewActionTagRequest().generateActionTag(this, actionId, actionValue, tagName, mySkin, accessToken, this);
@@ -130,7 +137,7 @@ Symbol scannable = NewActionTagRequest().generateActionTag(this, actionId, actio
 
 #### Without Quikkly back-end
 
-Scannables can be generated for use on your own back-end. Instantiating them requires an numeric value for the code and a Skin for visual representation with a [ScannableImageView](https://developers.quikkly.io/placeholder)
+Scannables can be generated for use on your own back-end. Instantiating them requires an numeric value for the code and a Skin for visual representation with a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html)
 
 ### Displaying Scannables
 
