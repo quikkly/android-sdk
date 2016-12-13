@@ -30,13 +30,13 @@ In order to use this SDK, a Quikkly app key is required. Visit [here](https://de
 ### Gradle
 
 To install the SDK simply add our repositories to your build.gradle file:
-```
+```gradle
 Release
 repositories {
     maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
 }
 ```
-```
+```gradle
 Snapshot
 repositories {
     maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
@@ -44,7 +44,7 @@ repositories {
 ```
 Then add the following 3 core components (Snapshot only available at this time) to start using Quikkly:
 
-```
+```gradle
 dependencies {
     compile('net.quikkly.android:scanning-sdk:0.9.0-SNAPSHOT@aar') {
         transitive = true; // This is required
@@ -56,7 +56,7 @@ dependencies {
 
 Additionally you may choose to use our ready packaged Scanning View, in which case simply add the folloing dependancy to your build.gradle.
 
-```
+```gradle
 compile('net.quikkly.android:scanning-sdk-ui:0.9.0-SNAPSHOT@aar')
 ```
 
@@ -71,21 +71,19 @@ YouTube Player API (v1.2.2) - If this library is not provided then the 'YouTube 
 For a simple and hassle free integration a pre-packaged activity handling the detection of Quikkly based Scannables is provided.
 It's as simple as this.
 
-```
-    public static final String INJECT_UI_KEY = "inject_ui";
+```java
+public static final String INJECT_UI_KEY = "inject_ui";
 
-    private QuikklyUi mQuikklyUi = new QuikklyUi();
+private QuikklyUi mQuikklyUi = new QuikklyUi();
 
-    @Override
-    protected void onResume() {
-
-        Intent intent = super.getIntent();
-        if (intent.getBooleanExtra(ScanActivity.INJECT_UI_KEY, true)) {
-            mQuikklyUi.onResume(this); // Important that this is executed before super.onResume()!
-        }
-
-        super.onResume();
+@Override
+protected void onResume() {
+    Intent intent = super.getIntent();
+    if (intent.getBooleanExtra(ScanActivity.INJECT_UI_KEY, true)) {
+        mQuikklyUi.onResume(this); // Important that this is executed before super.onResume()!
     }
+    super.onResume();
+}
 ```
 
 The QuikklyUI also handles the action processing, however you can override the aciton handling with your own custom implemntation. Please see the [Custom Action](https://developers.quikkly.io/placeholder) example for more details and some sample code.
@@ -95,23 +93,20 @@ The QuikklyUI also handles the action processing, however you can override the a
 For a more flexible implementation there is a ScanView class.
 It will notify it's ScanResultListener object about detected scannables. The snippet below shows an example of the overidden method used to pass back the scannable, but please see the [Custom Scan View](https://developers.quikkly.io/placeholder) example for more details and some sample code.
 
-```
-    @Override
-    public @Nullable Symbol onScanResult(@Nullable ScanResult scanResult) {
-
-        if (scanResult == null) {
-            return null;
-        }
-        else {
-            for (Symbol symbol : scanResult.getSymbols()) {
-                if (symbol.isValid()) {
-                    // do something here, maybe display?
-                }
+```java
+@Override
+public @Nullable Symbol onScanResult(@Nullable ScanResult scanResult) {
+    if (scanResult == null) {
+        return null;
+    } else {
+        for (Symbol symbol : scanResult.getSymbols()) {
+            if (symbol.isValid()) {
+                // do something here, maybe display?
             }
-
-            return null;
         }
+        return null;
     }
+}
 ```
 
 Note that this does not automatically handle the action as well. The detected Scannable object needs to be passed to an ActionHandler instance, or handled internally by your application. Please see the [Custom Scan Handling](https://developers.quikkly.io/placeholder) example for more details and some sample code.
@@ -123,16 +118,21 @@ Note that this does not automatically handle the action as well. The detected Sc
 To create a scannable on the Quikkly back-end, a few properties are needed, such as the type of action you wish to create, the data you want associated with the action and optionaly the display data in the form of a Skin.
 For instance:
 
-```
+```java
 Skin mySkin = new Skin();
 ```
 
 The Skin object has properties which can be set - Border, Code, Background colour and also the URL of the image you wish to place in the centre. Please see the [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) object's Javadocs for more details.
 
-Then it can be passed as a parameter of the generateActionTag method in the NewActionTagRequest interface. The skin can be nil as it will then use the default [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) provided by the Quikkly platform, but you are able to use the 
+Then it can be passed as a parameter of the generateActionTag method in the NewActionTagRequest interface. The skin can be nil as it will then use the default [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) provided by the Quikkly platform, but you are able to use the NewActionTagRequest().generateActionTag() method (example for Facebook shown below) to generate an action.
 
-```
-Symbol scannable = NewActionTagRequest().generateActionTag(this, actionId, actionValue, tagName, mySkin, accessToken, this);
+```java
+Long actionID = 0L; // like on Facebook
+String actionValue = "Quikkly"; // page_or_user_id
+String scannableName = "Like Quikkly on Facebook";
+
+// Now create the scannable. The context should be the Application Context and the Skin listener is any class which implements the SkinListener interface.
+Symbol scannable = NewActionTagRequest().generateActionTag(context, actionID, actionValue, scannableName, mySkin, accessToken, skinListener);
 ```
 
 #### Without Quikkly back-end
@@ -143,6 +143,6 @@ Scannables can be generated for use on your own back-end. Instantiating them req
 
 Simply set the scannable property of a ScannableImageView instance.
 
-```
+```java
 ScannableImageView.render(new Skin(someSkinJson), false, <default log url>);
 ```
