@@ -145,5 +145,5 @@ Scannables can be generated for use on your own back-end. Instantiating them req
 Simply set the scannable property of a ScannableImageView instance.
 
 ```java
-ScannableImageView.render(new Skin(someSkinJson), false, <default log url>);
+ScannableImageView.render(new Skin(someSkinJson), false, "http://some.default.image/url.png");
 ```
