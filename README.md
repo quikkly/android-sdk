@@ -130,6 +130,7 @@ Then it can be passed as a parameter of the generateActionTag method in the NewA
 Long actionID = 0L; // like on Facebook
 String actionValue = "Quikkly"; // page_or_user_id
 String scannableName = "Like Quikkly on Facebook";
+Skin mySkin = new Skin();
 
 // Now create the scannable. The context should be the Application Context and the Skin listener is any class which implements the SkinListener interface.
 Symbol scannable = NewActionTagRequest().generateActionTag(context, actionID, actionValue, scannableName, mySkin, accessToken, skinListener);
