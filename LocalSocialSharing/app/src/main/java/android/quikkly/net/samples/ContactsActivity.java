@@ -3,10 +3,13 @@ package android.quikkly.net.samples;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.appindexing.Action;
@@ -21,9 +24,9 @@ import net.quikkly.java.scan.Symbol;
 
 import java.util.ArrayList;
 
-public class ContactsActivity extends AppCompatActivity implements CameraStateListener, ScanResultListener {
+public class ContactsActivity extends AppCompatActivity {
 
-    ListView contactsListView;
+    private ListView contactsListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,33 +45,20 @@ public class ContactsActivity extends AppCompatActivity implements CameraStateLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
                 User itemValue = (User) contactsListView.getItemAtPosition(position);
-
                 Intent intent = new Intent(ContactsActivity.this, ProfileActivity.class);
                 intent.putExtra("userNum", itemValue.getId());
                 startActivity(intent);
             }
         });
-    }
 
-    @Override
-    public void onCameraReady(int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onCameraError(@Nullable String s) {
-
-    }
-
-    @Nullable
-    @Override
-    public Symbol onScanResult(@Nullable ScanResult scanResult) {
-        return null;
+        FloatingActionButton addContactButton = (FloatingActionButton) super.findViewById(R.id.add_contact_button);
+        addContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ContactsActivity.this, SocialScannerActivity.class);
+                ContactsActivity.this.startActivity(intent);
+            }
+        });
     }
 }
