@@ -1,0 +1,16 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/quikkly_scan_activity_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--<net.quikkly.android.test.sdk.libtest.ScannerOverlay-->
+        <!--android:id="@+id/overlay"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+</RelativeLayout>
