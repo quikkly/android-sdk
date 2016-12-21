@@ -1,7 +1,9 @@
 package android.quikkly.net.samples;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,7 +29,7 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.social_scanner_activity);
         super.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        super.setTitle(System.getProperty("os.arch"));
+        setTitle(R.string.scan_title);
 
         mScanFragment = new ScanFragment();
         mScanFragment.setScanResultListener(this);
@@ -63,12 +65,40 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
         else {
             for (Symbol symbol : scanResult.getSymbols()) {
                 if (symbol.isValid()) {
-                    // Do the follow action here.
+                    String id = symbol.getData();
+                    if(id.isEmpty() == false) {
+                        long longId = Long.decode(id);
+                        User user = ProfileHelper.getInstance().getUser(longId);
+                        if(user != null) {
+                            String successMessage = String.format(getString(R.string.user_follow_success), user.getUsername());
+                            showAlert(successMessage);
+                        } else {
+                            showAlert(getString(R.string.user_follow_error));
+                        }
+                    }
                 }
             }
 
             return null;
         }
+    }
+
+    private void showAlert(String message) {
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Add Contact");
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setNegativeButton("Dismiss", null);
+
+        super.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+            }
+        });
+
     }
 
 

@@ -29,6 +29,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
 
+        setTitle(R.string.profile_title);
+
         Skin skin = new Skin();
         mScannableImageView = (ScannableImageView) super.findViewById(R.id.scannable_view);
 
