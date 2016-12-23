@@ -45,6 +45,7 @@ dependencies {
     compile('net.quikkly.android:scanning-sdk-ui:0.9.0-SNAPSHOT@aar')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 
+    compile 'com.caverock:androidsvg:1.2.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
