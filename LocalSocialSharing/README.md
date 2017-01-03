@@ -67,7 +67,7 @@ Scanner.CodeLayout codeLayout = Scanner.CodeLayout.Horizontal;
 String codePattern = mScanner.generateV3CodePattern(codeLayout, userNum);       
 ```
 
-Then we need to instantiate a Skin object
+Then we need to instantiate a [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) object
 ```
 // Instantiate a skin object and SVG viewbox
 Skin.ViewBox viewBox = new Skin.ViewBox();
