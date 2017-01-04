@@ -9,10 +9,11 @@
 One of the many use cases for Quikkly's Smart Scannables lies within the sharing of social media content / account information, similar to Snapchat's Snapcodes. This Android Studio project contains a simple demo app showing how similar funcitonality can be achieved using the Quikkly SDK.
 
 The basic structure of the project is as follows:
-1. A simple contacts activity showing a dummy list of 'friends'.
-2. A simple 'Profile' Activity showing the 'Friend' details headed with a custom Scannable generated using the SDK locally. The scannable is generated using a custom skin and the Friend's user ID. This Activity is accessed by selecting one of the friends in the list OR by selecting the''Profile' button/icon in the top left of the navigations bar.
-3) A simple, vanilla Activity wrapping the integration of the Quikkly scanner. This activity demonstrates the instantiation, registration and handling of scan results.
+* A simple contacts activity showing a dummy list of 'friends'.
+* A simple 'Profile' Activity showing the 'Friend' details headed with a custom Scannable generated using the SDK locally. The scannable is generated using a custom skin and the Friend's user ID. This Activity is accessed by selecting one of the friends in the list OR by selecting the''Profile' button/icon in the top left of the navigations bar.
+* A simple, vanilla Activity wrapping the integration of the Quikkly scanner. This activity demonstrates the instantiation, registration and handling of scan results.
 
+Links to the various features:
 - [Configuration](#configuration)
 - [Scannables](#scannables)
 - [Scanning](#scanning)
@@ -66,7 +67,7 @@ Scanner.CodeLayout codeLayout = Scanner.CodeLayout.Horizontal;
 String codePattern = mScanner.generateV3CodePattern(codeLayout, userNum);       
 ```
 
-Then we need to instantiate a Skin object
+Then we need to instantiate a [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) object
 ```
 // Instantiate a skin object and SVG viewbox
 Skin.ViewBox viewBox = new Skin.ViewBox();
