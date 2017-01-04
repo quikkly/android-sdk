@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 repositories {
-    maven { url 'https://developers.quikkly.io/nexus/repository/maven-snapshots/' }
+    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
     mavenLocal()
     mavenCentral()
 }
