@@ -31,14 +31,18 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
         super.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setTitle(R.string.scan_title);
 
+        // We create an instance of the ScanFragment.
+        // The ScanFragment wraps the detector and provides mechanisms to listen for the scan result.
         mScanFragment = new ScanFragment();
         mScanFragment.setScanResultListener(this);
         mScanFragment.setCameraStateListener(this);
 
         FragmentManager fragmentManager = super.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.quikkly_scan_activity_root, mScanFragment);
+        fragmentTransaction.add(R.id.social_scanner_activity, mScanFragment);
         fragmentTransaction.commit();
+
+
     }
 
     @Override
@@ -65,6 +69,11 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
         else {
             for (Symbol symbol : scanResult.getSymbols()) {
                 if (symbol.isValid()) {
+
+                    // We have a result, pause the scanning.
+                    mScanFragment.pauseScanning(true);
+
+                    // DO SOMETHING WITH THE RESULT
                     String id = symbol.getData();
                     if(id.isEmpty() == false) {
                         long longId = Long.decode(id);
@@ -79,16 +88,25 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
                 }
             }
 
+            // Returning null here as there isn't a need to pass the Symbol (Scannable) back up...
             return null;
         }
     }
 
     private void showAlert(String message) {
 
+        // Set click listener for alert dialog buttons, in this instance to restart the scanner.
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mScanFragment.resumeScanning(true);
+            }
+        };
+
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Add Contact");
         dialogBuilder.setMessage(message);
-        dialogBuilder.setNegativeButton("Dismiss", null);
+        dialogBuilder.setNegativeButton("Dismiss", dialogClickListener);
 
         super.runOnUiThread(new Runnable() {
             @Override
@@ -100,7 +118,5 @@ public class SocialScannerActivity extends AppCompatActivity implements CameraSt
         });
 
     }
-
-
 
 }

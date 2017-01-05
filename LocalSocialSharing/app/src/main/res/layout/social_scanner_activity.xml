@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/quikkly_scan_activity_root"
+        android:id="@+id/social_scanner_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
