@@ -64,7 +64,7 @@ Some parts of the SDK require additional libraries that are either not available
 
 YouTube Player API (v1.2.2) - If this library is not provided then the 'YouTube to Web action' (See Actions#WATCH_ON_YOUTUBE will be disabled.
 
-### Scanning/Detection
+## Useage
 
 #### Scanner with default UI
 
@@ -86,59 +86,19 @@ protected void onResume() {
 }
 ```
 
-The QuikklyUI also handles the action processing, however you can override the aciton handling with your own custom implemntation. Please see the [Custom Action](https://developers.quikkly.io/placeholder) example for more details and some sample code.
+The QuikklyUI also handles the action processing.
 
-#### Scanner with Scan Fragment camera feed
+#### Scanner with Scan Fragment camera feed - Local handling of scan result.
 
-For a more flexible implementation there is a ScanView class.
-It will notify it's ScanResultListener object about detected scannables. The snippet below shows an example of the overidden method used to pass back the scannable, but please see the [Custom Scan View](https://developers.quikkly.io/placeholder) example for more details and some sample code.
+For a more flexible implementation there is a ScanFragment class. You can wrap up this ScanFragment within your own activity. The scanning and detection is handled for you but you will need to resume and pause the scanning yourself at the most approriate point within your app, i.e on detection of a valid tag you should pause scanning and when you have finished with the resulting object you should resume scanning.
 
-```java
-@Override
-public @Nullable Symbol onScanResult(@Nullable ScanResult scanResult) {
-    if (scanResult == null) {
-        return null;
-    } else {
-        for (Symbol symbol : scanResult.getSymbols()) {
-            if (symbol.isValid()) {
-                // do something here, maybe display?
-            }
-        }
-        return null;
-    }
-}
-```
+A more detailed example of how you can use the ScanFragment can be seen within our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app.
 
-Note that this does not automatically handle the action as well. The detected Scannable object needs to be passed to an ActionHandler instance, or handled internally by your application. Please see the [Custom Scan Handling](https://developers.quikkly.io/placeholder) example for more details and some sample code.
+#### Generation Without Quikkly back-end
 
-### Generating Scannables
+Scannables can be generated for use within your own app and also passed back to you if you wish to store them within your own back-end solution. Instantiating them requires an numeric value for the code and a Skin for visual representation within a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html).
 
-#### With actions via Quikkly back-end
-
-To create a scannable on the Quikkly back-end, a few properties are needed, such as the type of action you wish to create, the data you want associated with the action and optionaly the display data in the form of a Skin.
-For instance:
-
-```java
-Skin mySkin = new Skin();
-```
-
-The Skin object has properties which can be set - Border, Code, Background colour and also the URL of the image you wish to place in the centre. Please see the [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) object's Javadocs for more details.
-
-Then it can be passed as a parameter of the generateActionTag method in the NewActionTagRequest interface. The skin can be nil as it will then use the default [Skin](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/Skin.html) provided by the Quikkly platform, but you are able to use the NewActionTagRequest().generateActionTag() method (example for Facebook shown below) to generate an action.
-
-```java
-Long actionID = 0L; // like on Facebook
-String actionValue = "Quikkly"; // page_or_user_id
-String scannableName = "Like Quikkly on Facebook";
-Skin mySkin = new Skin();
-
-// Now create the scannable. The context should be the Application Context and the Skin listener is any class which implements the SkinListener interface.
-Symbol scannable = NewActionTagRequest().generateActionTag(context, actionID, actionValue, scannableName, mySkin, accessToken, skinListener);
-```
-
-#### Without Quikkly back-end
-
-Scannables can be generated for use on your own back-end. Instantiating them requires an numeric value for the code and a Skin for visual representation with a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html)
+Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
 
 ### Displaying Scannables
 
@@ -147,3 +107,5 @@ Simply set the scannable property of a ScannableImageView instance.
 ```java
 ScannableImageView.render(new Skin(someSkinJson), false, "http://some.default.image/url.png");
 ```
+Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
+
