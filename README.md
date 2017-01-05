@@ -86,7 +86,7 @@ protected void onResume() {
 }
 ```
 
-The QuikklyUI also handles the action processing, however you can override the aciton handling with your own custom implemntation. Please see the [Custom Action](https://developers.quikkly.io/placeholder) example for more details and some sample code.
+The QuikklyUI also handles the action processing.
 
 #### Scanner with Scan Fragment camera feed - Local handling of scan result.
 
@@ -94,9 +94,11 @@ For a more flexible implementation there is a ScanFragment class. You can wrap u
 
 A more detailed example of how you can use the ScanFragment can be seen within our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app.
 
-#### Without Quikkly back-end
+#### Generation Without Quikkly back-end
 
-Scannables can be generated for use on your own back-end. Instantiating them requires an numeric value for the code and a Skin for visual representation with a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html)
+Scannables can be generated for use within your own app and also passed back to you if you wish to store them within your own back-end solution. Instantiating them requires an numeric value for the code and a Skin for visual representation within a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html).
+
+Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
 
 ### Displaying Scannables
 
@@ -105,3 +107,5 @@ Simply set the scannable property of a ScannableImageView instance.
 ```java
 ScannableImageView.render(new Skin(someSkinJson), false, "http://some.default.image/url.png");
 ```
+Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
+
