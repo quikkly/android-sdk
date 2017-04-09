@@ -21,7 +21,7 @@ Quikkly is the easiest way to implement smart scannables within your app
 
 ## Requirements
 
-- Android SDK level 17+
+- Android SDK level 19+
 
 ## Installation
 
@@ -46,11 +46,11 @@ Then add the following 3 core components (Snapshot only available at this time) 
 
 ```gradle
 dependencies {
-    compile('net.quikkly.android:scanning-sdk:0.9.0-SNAPSHOT@aar') {
+    compile('net.quikkly.android:scanning-sdk:0.9.9@aar') {
         transitive = true; // This is required
     }
-    compile('net.quikkly.android:render-lib:0.9.0-SNAPSHOT@aar')
-    compile('net.quikkly.android:scan-lib:0.9.0-SNAPSHOT@aar')
+    compile('net.quikkly.android:render-lib:0.9.9@aar')
+    compile('net.quikkly.android:scan-lib:0.9.9@aar')
 }
 ```
 
@@ -86,26 +86,30 @@ protected void onResume() {
 }
 ```
 
-The QuikklyUI also handles the action processing.
+The QuikklyUI also handles the action processing. However if you wish to override the handling of the Action when found on our backend APIs you can provide an implementation of the 'ActionListener' interface, overriding the onActionTagFound method.
 
 #### Scanner with Scan Fragment camera feed - Local handling of scan result.
 
 For a more flexible implementation there is a ScanFragment class. You can wrap up this ScanFragment within your own activity. The scanning and detection is handled for you but you will need to resume and pause the scanning yourself at the most approriate point within your app, i.e on detection of a valid tag you should pause scanning and when you have finished with the resulting object you should resume scanning.
 
-A more detailed example of how you can use the ScanFragment can be seen within our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app.
-
 #### Generation Without Quikkly back-end
 
-Scannables can be generated for use within your own app and also passed back to you if you wish to store them within your own back-end solution. Instantiating them requires an numeric value for the code and a Skin for visual representation within a [ScannableImageView](http://docs.quikkly.io/android/0.9.0/render-lib/net/quikkly/android/render/ScannableImageView.html).
+Scannables can be generated for use within your own app and also passed back to you if you wish to store them within your own back-end solution. Instantiating them requires an numeric value for the code and a Skin for visual representation. You will also need to know which 'Template' you wish to use. Template identifiers can be found within the Blueprint you have created on our [Developer Portal](https://developers.quikkly.io/home/create-scannable/).
 
-Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
-
-### Displaying Scannables
-
-Simply set the scannable property of a ScannableImageView instance.
+Scannables can be displayed by using the RenderTagView, a snippet is shown below.
 
 ```java
-ScannableImageView.render(new Skin(someSkinJson), false, "http://some.default.image/url.png");
+String template = "template0001style1";  // The template you want to render, as per Blueprint.
+BigInteger data = 123456789; // the number to encode.
+Skin skin = new Skin();
+skin.backgroundColor = #FFFFFF;
+skin.borderColor = "#000000";
+skin.maskColor = "#FFFFFF";
+skin.overlayColor = "#FFFFFF";
+skin.dataColor = "#000000";
+skin.imageFit = 1;
+skin.imageUrl = "http://server.com/image_ref.png";
+
+renderView.setAll(template, data, skin);
 ```
-Again, our [Local Social Sharing](https://github.com/quikkly/android-sdk/tree/master/LocalSocialSharing) sample app details how you can achieve this.
 
