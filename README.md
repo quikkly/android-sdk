@@ -5,12 +5,16 @@
 ![Gradle Compatible](https://img.shields.io/badge/gradle-compatible-green.svg)
 [![Website](https://img.shields.io/badge/quikkly.io-developers-5cb8a7.svg)](https://developers.quikkly.io)
 
-Quikkly is the easiest way to implement smart scannables within your app
+Quikkly is the easiest way to implement smart scannables within your app.
 
 - [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Setup](#setup)
+  - [Scanning](#scannable)
+  - [Generating](#generating)
+  - [Default Scanning](#default-scanning)
 
 ## Features
 
@@ -25,12 +29,7 @@ Quikkly is the easiest way to implement smart scannables within your app
 
 ## Installation
 
-In order to use this SDK, a Quikkly app key is required. Visit [here](https://developers.quikkly.io) for more information.
-
-The app key must be added to your manifest within the Application block:
-```xml
-<meta-data android:name="quikkly_api_key" android:value="YOUR_API_KEY"/>
-```
+In order to use this SDK, a Quikkly app key is required. Visit [here](https://developers.quikkly.io/home/get_started/) for more information.
 
 ### Gradle
 
@@ -38,106 +37,104 @@ To install the SDK simply add our repositories to your build.gradle file:
 ```gradle
 Release
 repositories {
-    maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
+   maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
 }
 ```
 ```gradle
 Snapshot
 repositories {
-    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
+   maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
 }
 ```
-Then add the following 3 core components (Snapshot only available at this time) to start using Quikkly:
+
+#### Quikkly's Scanner and Code Generator
+The simplest integration of Quikkly requires just 2 core dependencies to provide in-app generation and detection:
+```gradle
+dependencies {
+
+   compile 'net.quikkly.android:quikklycore-lib:1.0.0@aar'
+   compile 'net.quikkly.android:quikkly-lib:1.0.0@aar'
+}
+```
+
+The above libraries provide you with all you need to allow your app to detect smart codes, handle the detection result and generate in-app representations of a code (offline generation)
+
+#### Quikkly's APIs
+Alternatively / Additionally you may wish to use Quikkly's CLoud Services. TO support this you should add the following core components:
 
 ```gradle
 dependencies {
 
-    compile 'net.quikkly.android:quikklycore-lib:1.0.0@aar'
+   compile('net.quikkly.android:scan-lib:1.0.0@aar') {
+       transitive = true;
+   }
 
-    compile('net.quikkly.android:scan-lib:1.0.0@aar') {
-        transitive = true;
-    }
+   compile('net.quikkly.android:scanning-sdk:1.0.0@aar') {
+       transitive = true;
+   }
 
-    compile('net.quikkly.android:scanning-sdk:1.0.0@aar') {
-        transitive = true;
-    }
-
-    compile('net.quikkly.android:render-lib:1.0.0@aar') {
-        transitive = true;
-    }
+   compile('net.quikkly.android:render-lib:1.0.0@aar') {
+       transitive = true;
+   }
 }
 ```
 
-Additionally you may choose to use our ready packaged Scanning View, in which case simply add the folloing dependancy to your build.gradle.
-
-```gradle
-compile('net.quikkly.android:scanning-sdk-ui:4.0.0@aar')
+The above libraries provide you with wrapper to be able to register Custom Actions, detect and handle the results from calls to our APIs as well as use stock, pre-packaged wrappers to initialise the Scanner. These set of libraries are a little legacy and if used require you to add the app ey to your manifest within the Application block:
+```xml
+<meta-data android:name="quikkly_api_key" android:value="YOUR_API_KEY"/>
 ```
 
+#### Additional optional libraries
 Some parts of the SDK require additional libraries that are either not available via online repositories or we cannot distribute directly to you. Below is the list of optional libraries that you must provide yourself.
 
 YouTube Player API (v1.2.2) - If this library is not provided then the 'YouTube to Web action' (See Actions#WATCH_ON_YOUTUBE will be disabled.
 
 ## Useage
 
-#### Scanner with default UI
+### Setup
 
-For a simple and hassle free integration a pre-packaged activity handling the detection of Quikkly based Scannables is provided.
+In order to use our SDK there are a few pre-requisite steps required when setting up your project.
 
-To launch the default scanning experience create a new Activity which extends ScanActivity from within net.quikkly.android.scanning.scanner.ScanActivity.
+1. Create a 'Blueprint' for your scannable on the [Quikkly Developer Portal](https://developers.quikkly.io/home/create-scannable/). The blueprint needs adding to your project's Assets.
+
+2. Set the Quikkly API key in your main Application or the Main Activity of your app. The Value for the key will be your App key obtained from Quikkly ([here](https://developers.quikkly.io/my-quikkly/my-apps/)). The api key has to be valid, otherwise certain features of the SDK will not work.
+```
+new QuikklyBuilder()
+           .setApiKey("1GUVj1rMEgAutuphM39aPw6lzvXV6SpDqttlNsq981uIqNRX8LnDo6H334EgZIsjM7")
+           .loadBlueprintFromAssets(this, "custom_blueprint.json")
+           .build()
+           .setAsDefault();
+```
+
+With these steps in place you are now ready to launch the basic integration of Quikkly's SDK.
+
+#### Scanning
+
+Create a new Activity and add the net.quikkly.android.ui package. This Activity needs to extend the ScanActivity class, from which you can override the onScanResult method. With this option you are also free to customise the overall UI to fit in within your own UX. For a fully packaged alternative approach, please see Default Scanning, below.
 
 ```java
-public class MainActivity extends ScanActivity implements QuikklyUi.Listener {
+public class MainActivity extends ScanActivity {
 
-// Activity based code in here.
-
+   @Override
+   protected void onCreate(@Nullable Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       super.setContentView(R.layout.quikkly_scan_activity);
+   }
+  
+   /**
+    * Override in subclass to handle.
+    *
+    * Warning: will be called from background threads. Use handlers to post back to UI thread.
+    * result.tags is an array of all found Scannable Codes within a frame. You can iterate through them, calling
+    * getData() on each to obtain their encoded numeric value.
+    */
+   public void onScanResult(@Nullable ScanResult result) {
+       Log.e(TAG, "ScanResult " + result.tags[0].getData());
+   }
 }
 ```
 
-THen further down in your overidden 'onResume()' method add the following:
-
-```java
-public static final String INJECT_UI_KEY = "inject_ui";
-
-private QuikklyUi mQuikklyUi = new QuikklyUi();
-
-@Override
-protected void onResume() {
-    Intent intent = super.getIntent();
-    if (intent.getBooleanExtra(ScanActivity.INJECT_UI_KEY, true)) {
-        mQuikklyUi.onResume(this); // Important that this is executed before super.onResume()!
-    }
-    super.onResume();
-}
-```
-
-The QuikklyUI also handles the action processing. You can optionally implement the QuikklyUI.Listener  interface to override the detection and results of Actions when the SDK completes the detecttion and requests the Actionable data from our services.
-A great use case for this is overidding the action data that would come back from a 'Visit Website' based code. You can grab the url and process internally yourself.
-
-```java
-public class MainActivity extends ScanActivity implements QuikklyUi.Listener {
-
-        @Override
-        public void onActionResult(Action action, @NonNull Scannable<?> scannable, @NonNull ActionListener.ActionStatus status, final String message) {
-            if(action != null) {
-                int actionId = action.getActionId();
-                if (actionId == Actions.VISIT_WEBSITE) {
-                    String url = scannable.getActionData();
-                    // Do something with the url
-                }
-            }
-
-            super.onActionResult(action, scannable, status, message);
-        }
-
-}
-```
-
-#### Scanner with Scan Fragment camera feed - Local handling of scan result.
-
-For a more flexible implementation there is a ScanFragment class. You can wrap up this ScanFragment within your own activity. The scanning and detection is handled for you but you will need to resume and pause the scanning yourself at the most approriate point within your app, i.e on detection of a valid tag you should pause scanning and when you have finished with the resulting object you should resume scanning.
-
-#### Generation Without Quikkly back-end
+#### Generating
 
 Scannables can be generated for use within your own app and also passed back to you if you wish to store them within your own back-end solution. Instantiating them requires an numeric value for the code and a Skin for visual representation. You will also need to know which 'Template' you wish to use. Template identifiers can be found within the Blueprint you have created on our [Developer Portal](https://developers.quikkly.io/home/create-scannable/).
 
@@ -158,3 +155,55 @@ skin.imageUrl = "http://server.com/image_ref.png";
 renderView.setAll(template, data, skin);
 ```
 
+## Default Scanning
+
+### Default Scanner with Action Handling
+
+For a simple and hassle free integration a pre-packaged activity which wraps up both Scanning, Detection and Action request/processing there is a ScanActivity which can be extended within the net.quikkly.android.scanning.scanner package.
+
+```java
+public class MainActivity extends ScanActivity {
+
+// Activity based code in here.
+
+}
+```
+
+Then further down in your code override 'onResume()' method add the following to instantiate the wrapper QuikklyUi, which launches the scanner:
+
+```java
+public static final String INJECT_UI_KEY = "inject_ui";
+
+private QuikklyUi mQuikklyUi = new QuikklyUi();
+
+@Override
+protected void onResume() {
+   Intent intent = super.getIntent();
+   if (intent.getBooleanExtra(ScanActivity.INJECT_UI_KEY, true)) {
+       mQuikklyUi.onResume(this); // Important that this is executed before super.onResume()!
+   }
+   super.onResume();
+}
+```
+
+You can optionally implement the QuikklyUI.Listener interface to override the handling and processing of Actions when the SDK completes the detection and requests the Actionable data from our services.
+A great use case for this is overriding the action data that would come back from a 'Visit Website' based code. You can grab the url and process internally yourself.
+
+```java
+public class MainActivity extends ScanActivity implements QuikklyUi.Listener {
+
+       @Override
+       public void onActionResult(Action action, @NonNull Scannable<?> scannable, @NonNull ActionListener.ActionStatus status, final String message) {
+           if(action != null) {
+               int actionId = action.getActionId();
+               if (actionId == Actions.VISIT_WEBSITE) {
+                   String url = scannable.getActionData();
+                   // Do something with the url
+               }
+           }
+
+           super.onActionResult(action, scannable, status, message);
+       }
+
+}
+```
