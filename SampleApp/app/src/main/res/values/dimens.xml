@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="render_data_textsize">20dp</dimen>
+    <dimen name="render_color_size">40dp</dimen>
+    <dimen name="render_color_textsize">16dp</dimen>
+    <dimen name="render_input_textsize">16dp</dimen>
+</resources>

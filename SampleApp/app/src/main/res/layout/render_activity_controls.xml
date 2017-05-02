@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/render_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/render_data_textsize"
+        android:text="12345"
+        android:inputType="number"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/solid_border"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            >
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_border_color"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                />
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_background_color"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_mask_color"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_overlay_color"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_data_color"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            >
+
+            <TextView
+                android:text="Border"
+                android:textSize="@dimen/render_color_textsize"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/render_color_size"
+                />
+
+            <TextView
+                android:text="Background"
+                android:textSize="@dimen/render_color_textsize"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:text="Mask"
+                android:textSize="@dimen/render_color_textsize"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:text="Overlay"
+                android:textSize="@dimen/render_color_textsize"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:text="Data"
+                android:textSize="@dimen/render_color_textsize"
+                android:gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="16dp"
+            >
+
+            <net.quikkly.android.testingapp.PopupChoiceView
+                android:id="@+id/render_template"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/render_input_textsize"
+                android:padding="10dp"
+                android:background="@drawable/solid_border"
+                />
+
+            <net.quikkly.android.testingapp.PopupChoiceView
+                android:id="@+id/render_fit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/render_input_textsize"
+                android:padding="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/solid_border"
+                />
+
+            <TextView
+                android:id="@+id/render_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick Photo"
+                android:textSize="@dimen/render_input_textsize"
+                android:padding="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/solid_border"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
