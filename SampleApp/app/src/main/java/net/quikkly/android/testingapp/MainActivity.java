@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import net.quikkly.android.QuikklyBuilder;
+import net.quikkly.android.ui.RenderTagView;
 import net.quikkly.android.ui.ScanActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new QuikklyBuilder()
-            .setApiKey("1GUVj1rMEgAutuphM39aPw6lzvXV6SpDqttlNsq981uIqNRX8LnDo6H334EgZIsjM7")
+            .setApiKey("YOUR API KEY HERE")
             .loadDefaultBlueprintFromLibraryAssets(this)
             .build()
             .setAsDefault();
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.gen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RenderActivity.launch(MainActivity.this);
+                startActivity(new Intent(getBaseContext(), RenderActivity.class));
             }
         });
     }
