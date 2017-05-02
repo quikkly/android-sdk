@@ -23,13 +23,6 @@
             </intent-filter>
         </activity>
 
-        <!--<activity-->
-            <!--android:name="net.quikkly.android.ui.ScanActivity"-->
-            <!--android:label="Scan"-->
-            <!--android:theme="@style/QuikklyScanActivityTheme"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--/>-->
-
         <activity
             android:name=".RenderActivity"
             android:label="Generate"
