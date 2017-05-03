@@ -20,10 +20,9 @@ android {
 }
 
 repositories {
-//    maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
-//    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
+    maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
+    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
     maven { url 'https://maven.fabric.io/public' }
-    mavenLocal();
 }
 
 
