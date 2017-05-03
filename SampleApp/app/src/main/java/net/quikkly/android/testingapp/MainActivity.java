@@ -18,10 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
         new QuikklyBuilder()
             .setApiKey("YOUR API KEY HERE")
-            .loadDefaultBlueprintFromLibraryAssets(this)
+            .loadBlueprintFromAssets(this, "custom_blueprint.json")
             .build()
             .setAsDefault();
-
 
         findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -23,6 +23,7 @@ repositories {
     maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
     maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
     maven { url 'https://maven.fabric.io/public' }
+    mavenLocal()
 }
 
 
@@ -38,6 +39,7 @@ dependencies {
     compile 'com.android.support:design:' + SUPPORT_LIBS_VERSION
     compile 'com.android.support:support-vector-drawable:' + SUPPORT_LIBS_VERSION
 
+    // A dependancy of our RenderTagView for displaying Quikkly codes
     compile 'com.caverock:androidsvg:1.2.1'
 
     compile 'commons-io:commons-io:2.5'
@@ -49,8 +51,8 @@ dependencies {
     }
     testCompile 'junit:junit:4.12'
 
-    compile ('net.quikkly.android:quikklycore-lib:1.0.0@aar') {
+    compile ('net.quikkly.android:quikklycore-lib:1.0.1-SNAPSHOT@aar') {
         transitive = true
     }
-    compile 'net.quikkly.android:quikkly-lib:1.0.0@aar'
+    compile 'net.quikkly.android:quikkly-lib:1.0.1-SNAPSHOT@aar'
 }
