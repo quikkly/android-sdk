@@ -51,7 +51,6 @@ repositories {
 The simplest integration of Quikkly requires just 2 core dependencies to provide in-app generation and detection:
 ```gradle
 dependencies {
-
    compile 'net.quikkly.android:quikklycore-lib:1.0.0@aar'
    compile 'net.quikkly.android:quikkly-lib:1.0.0@aar'
 }
@@ -64,7 +63,6 @@ Alternatively / Additionally you may wish to use Quikkly's CLoud Services. TO su
 
 ```gradle
 dependencies {
-
    compile('net.quikkly.android:scan-lib:1.0.0@aar') {
        transitive = true;
    }
@@ -89,7 +87,7 @@ Some parts of the SDK require additional libraries that are either not available
 
 YouTube Player API (v1.2.2) - If this library is not provided then the 'YouTube to Web action' (See Actions#WATCH_ON_YOUTUBE will be disabled.
 
-## Useage
+## Usage
 
 ### Setup
 
@@ -98,7 +96,7 @@ In order to use our SDK there are a few pre-requisite steps required when settin
 1. Create a 'Blueprint' for your scannable on the [Quikkly Developer Portal](https://developers.quikkly.io/home/create-scannable/). The blueprint needs adding to your project's Assets.
 
 2. Set the Quikkly API key in your main Application or the Main Activity of your app. The Value for the key will be your App key obtained from Quikkly ([here](https://developers.quikkly.io/my-quikkly/my-apps/)). The api key has to be valid, otherwise certain features of the SDK will not work.
-```
+```java
 new QuikklyBuilder()
            .setApiKey("1GUVj1rMEgAutuphM39aPw6lzvXV6SpDqttlNsq981uIqNRX8LnDo6H334EgZIsjM7")
            .loadBlueprintFromAssets(this, "custom_blueprint.json")
@@ -120,7 +118,7 @@ public class MainActivity extends ScanActivity {
        super.onCreate(savedInstanceState);
        super.setContentView(R.layout.quikkly_scan_activity);
    }
-  
+
    /**
     * Override in subclass to handle.
     *
@@ -164,23 +162,23 @@ For a simple and hassle free integration a pre-packaged activity which wraps up 
 ```java
 public class MainActivity extends ScanActivity {
 
-// Activity based code in here.
+    // Activity based code in here.
 
 }
 ```
 
-Then further down in your code override 'onResume()' method add the following to instantiate the wrapper QuikklyUi, which launches the scanner:
+Then further down in your code override 'onResume()' method add the following to instantiate the wrapper QuikklyUI, which launches the scanner:
 
 ```java
 public static final String INJECT_UI_KEY = "inject_ui";
 
-private QuikklyUi mQuikklyUi = new QuikklyUi();
+private QuikklyUi quikklyUI = new QuikklyUi();
 
 @Override
 protected void onResume() {
    Intent intent = super.getIntent();
    if (intent.getBooleanExtra(ScanActivity.INJECT_UI_KEY, true)) {
-       mQuikklyUi.onResume(this); // Important that this is executed before super.onResume()!
+       quikklyUI.onResume(this); // Important that this is executed before super.onResume()!
    }
    super.onResume();
 }
@@ -201,9 +199,7 @@ public class MainActivity extends ScanActivity implements QuikklyUi.Listener {
                    // Do something with the url
                }
            }
-
            super.onActionResult(action, scannable, status, message);
        }
-
 }
 ```
