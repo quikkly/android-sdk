@@ -51,8 +51,8 @@ repositories {
 The simplest integration of Quikkly requires just 2 core dependencies to provide in-app generation and detection:
 ```gradle
 dependencies {
-   compile 'net.quikkly.android:quikklycore-lib:1.0.0@aar'
-   compile 'net.quikkly.android:quikkly-lib:1.0.0@aar'
+   compile 'net.quikkly.android:quikklycore-lib:1.0.1@aar'
+   compile 'net.quikkly.android:quikkly-lib:1.0.1@aar'
 }
 ```
 
@@ -63,15 +63,15 @@ Alternatively / Additionally you may wish to use Quikkly's CLoud Services. TO su
 
 ```gradle
 dependencies {
-   compile('net.quikkly.android:scan-lib:1.0.0@aar') {
+   compile('net.quikkly.android:scan-lib:1.0.1@aar') {
        transitive = true;
    }
 
-   compile('net.quikkly.android:scanning-sdk:1.0.0@aar') {
+   compile('net.quikkly.android:scanning-sdk:1.0.1@aar') {
        transitive = true;
    }
 
-   compile('net.quikkly.android:render-lib:1.0.0@aar') {
+   compile('net.quikkly.android:render-lib:1.0.1@aar') {
        transitive = true;
    }
 }
