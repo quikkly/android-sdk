@@ -51,8 +51,8 @@ dependencies {
     }
     testCompile 'junit:junit:4.12'
 
-    compile ('net.quikkly.android:quikklycore-lib:1.0.1-SNAPSHOT@aar') {
+    compile ('net.quikkly.android:quikklycore-lib:1.0.1@aar') {
         transitive = true
     }
-    compile 'net.quikkly.android:quikkly-lib:1.0.1-SNAPSHOT@aar'
+    compile 'net.quikkly.android:quikkly-lib:1.0.1@aar'
 }
