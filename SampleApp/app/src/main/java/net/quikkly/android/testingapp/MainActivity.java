@@ -11,6 +11,8 @@ import net.quikkly.android.ui.ScanActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_SHOW_OVERLAY = "show_overlay";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,14 +20,16 @@ public class MainActivity extends AppCompatActivity {
 
         new QuikklyBuilder()
             .setApiKey("YOUR API KEY HERE")
-            .loadBlueprintFromAssets(this, "custom_blueprint.json")
+            .loadDefaultBlueprintFromLibraryAssets(this)
             .build()
             .setAsDefault();
 
         findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), TestScanActivity.class));
+                Intent intent = new Intent(getBaseContext(), TestScanActivity.class);
+                intent.putExtra(EXTRA_SHOW_OVERLAY, true);
+                startActivity(intent);
             }
         });
 

@@ -25,9 +25,9 @@ public class TestScanActivity extends ScanActivity {
     public void onScanResult(@Nullable ScanResult result) {
 
         if(result != null && result.isEmpty() == false) {
-            Log.d("quikkly", "found " + result.tags.length + " codes");
+            Log.i("quikkly", "found " + result.tags.length + " codes");
             for(Tag scannedCode : result.tags) {
-                Log.d("quikkly", "Code:" + scannedCode.getData());
+                Log.i("quikkly", "Code:" + scannedCode.getData());
             }
         }
     }
