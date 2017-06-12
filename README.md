@@ -1,7 +1,7 @@
 ![Quikkly SDK for Android BETA](https://github.com/quikkly/android-sdk/blob/master/banner.png?raw=true)
 
 ![Build Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Platforms Android](https://img.shields.io/badge/android-sdk%2017%2B-blue.svg)
+![Latest Version](https://img.shields.io/badge/version-1.2.1-green.svg)
 ![Gradle Compatible](https://img.shields.io/badge/gradle-compatible-green.svg)
 [![Website](https://img.shields.io/badge/quikkly.io-developers-5cb8a7.svg)](https://developers.quikkly.io)
 
@@ -63,15 +63,15 @@ Alternatively / Additionally you may wish to use Quikkly's CLoud Services. TO su
 
 ```gradle
 dependencies {
-   compile('net.quikkly.android:scan-lib:1.2.0@aar') {
+   compile('net.quikkly.android:scan-lib:<LATEST_VERSION>@aar') {
        transitive = true;
    }
 
-   compile('net.quikkly.android:scanning-sdk:1.2.0@aar') {
+   compile('net.quikkly.android:scanning-sdk:<LATEST_VERSION>@aar') {
        transitive = true;
    }
 
-   compile('net.quikkly.android:render-lib:1.2.0@aar') {
+   compile('net.quikkly.android:render-lib:<LATEST_VERSION>@aar') {
        transitive = true;
    }
 }
