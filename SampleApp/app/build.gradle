@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION
     defaultConfig {
         applicationId "net.quikkly.android.testingapp"
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,40 +19,21 @@ android {
     }
 }
 
-repositories {
-    maven { url 'http://developers.quikkly.io/nexus/repository/maven-releases/' }
-    maven { url 'http://developers.quikkly.io/nexus/repository/maven-snapshots/' }
-    maven { url 'https://maven.fabric.io/public' }
-    mavenLocal()
-}
-
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:' + SUPPORT_LIBS_VERSION
-    compile 'com.android.support:support-v13:' + SUPPORT_LIBS_VERSION
-    compile 'com.android.support:design:' + SUPPORT_LIBS_VERSION
-    compile 'com.android.support:support-vector-drawable:' + SUPPORT_LIBS_VERSION
-
-    // A dependancy of our RenderTagView for displaying Quikkly codes
-    compile 'com.caverock:androidsvg:1.2.1'
-
-    compile 'commons-io:commons-io:2.5'
+    api 'commons-codec:commons-codec:1.11'
+    api 'commons-io:commons-io:2.5'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:' + SUPPORT_LIBS_VERSION
+    implementation 'com.android.support:support-v13:' + SUPPORT_LIBS_VERSION
+    implementation 'com.android.support:design:' + SUPPORT_LIBS_VERSION
+    implementation 'com.android.support:support-vector-drawable:' + SUPPORT_LIBS_VERSION
 
     // Pretty color picker
-    compile ('com.thebluealliance:spectrum:0.7.1') {
+    implementation ('com.thebluealliance:spectrum:0.7.1') {
         // spectrum uses older support libs, override these with latest.
         exclude group: 'com.android.support'
     }
-    testCompile 'junit:junit:4.12'
 
-    compile ('net.quikkly.android:quikklycore-lib:1.2.0@aar') {
-        transitive = true
-    }
-    compile 'net.quikkly.android:quikkly-lib:1.2.0@aar'
+    implementation 'net.quikkly.core:quikklycore-lib:3.4.18'
+    implementation 'net.quikkly.android:quikkly-lib:3.4.18'
 }

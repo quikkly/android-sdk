@@ -1,0 +1,18 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/action_export_svg"
+        android:title="Export SVG"
+        res:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/action_export_png"
+        android:title="Export PNG"
+        res:showAsAction="never"
+        />
+
+</menu>

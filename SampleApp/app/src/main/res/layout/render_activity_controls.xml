@@ -13,7 +13,7 @@
         android:textSize="@dimen/render_data_textsize"
         android:text="12345"
         android:inputType="number"
-        android:padding="16dp"
+        android:padding="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -36,34 +36,34 @@
             >
 
             <net.quikkly.android.testingapp.ColorPicker
-                android:id="@+id/render_border_color"
+                android:id="@+id/render_color_border"
                 android:layout_width="@dimen/render_color_size"
                 android:layout_height="@dimen/render_color_size"
                 />
 
             <net.quikkly.android.testingapp.ColorPicker
-                android:id="@+id/render_background_color"
-                android:layout_width="@dimen/render_color_size"
-                android:layout_height="@dimen/render_color_size"
-                android:layout_marginTop="8dp"
-                />
-
-            <net.quikkly.android.testingapp.ColorPicker
-                android:id="@+id/render_mask_color"
+                android:id="@+id/render_color_background"
                 android:layout_width="@dimen/render_color_size"
                 android:layout_height="@dimen/render_color_size"
                 android:layout_marginTop="8dp"
                 />
 
             <net.quikkly.android.testingapp.ColorPicker
-                android:id="@+id/render_overlay_color"
+                android:id="@+id/render_color_mask"
                 android:layout_width="@dimen/render_color_size"
                 android:layout_height="@dimen/render_color_size"
                 android:layout_marginTop="8dp"
                 />
 
             <net.quikkly.android.testingapp.ColorPicker
-                android:id="@+id/render_data_color"
+                android:id="@+id/render_color_overlay"
+                android:layout_width="@dimen/render_color_size"
+                android:layout_height="@dimen/render_color_size"
+                android:layout_marginTop="8dp"
+                />
+
+            <net.quikkly.android.testingapp.ColorPicker
+                android:id="@+id/render_color_data"
                 android:layout_width="@dimen/render_color_size"
                 android:layout_height="@dimen/render_color_size"
                 android:layout_marginTop="8dp"
@@ -143,6 +143,16 @@
 
             <net.quikkly.android.testingapp.PopupChoiceView
                 android:id="@+id/render_fit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/render_input_textsize"
+                android:padding="10dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/solid_border"
+                />
+
+            <net.quikkly.android.testingapp.PopupChoiceView
+                android:id="@+id/render_join"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/render_input_textsize"

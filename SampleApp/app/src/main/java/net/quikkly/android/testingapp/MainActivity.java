@@ -1,13 +1,14 @@
 package net.quikkly.android.testingapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
-import net.quikkly.android.QuikklyBuilder;
-import net.quikkly.android.ui.RenderTagView;
+import net.quikkly.android.Quikkly;
 import net.quikkly.android.ui.ScanActivity;
+import net.quikkly.android.ui.ScanFragment;
+import net.quikkly.core.QuikklyCore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,25 +19,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new QuikklyBuilder()
-            .setApiKey("YOUR API KEY HERE")
-            .loadDefaultBlueprintFromLibraryAssets(this)
-            .build()
-            .setAsDefault();
+        Log.e(Quikkly.TAG, "Linking test");
+        QuikklyCore.checkLinking();
+        Log.e(Quikkly.TAG, "Linking OK");
+
+        if (!Quikkly.isConfigured()) {
+            Quikkly.configureInstance(MainActivity.this, 2, 0);
+        }
 
         findViewById(R.id.scan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), TestScanActivity.class);
-                intent.putExtra(EXTRA_SHOW_OVERLAY, true);
-                startActivity(intent);
+                ScanActivity.launch(MainActivity.this, 1, true, false, ScanFragment.CAMERA_PREVIEW_FIT_NONE);
             }
         });
 
         findViewById(R.id.gen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), RenderActivity.class));
+                RenderActivity.launch(MainActivity.this);
             }
         });
     }

@@ -3,25 +3,28 @@ package net.quikkly.android.testingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import net.quikkly.android.Quikkly;
+import net.quikkly.android.render.AndroidSkinBuilder;
 import net.quikkly.android.ui.RenderTagView;
 import net.quikkly.core.Skin;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigInteger;
 
 
@@ -32,49 +35,35 @@ import java.math.BigInteger;
  */
 public class RenderActivity extends AppCompatActivity {
 
-    // TODO: this should be loaded from the blueprint
+    public static final int PHOTO_REQUEST = 19128;
+
     private static String[] TEMPLATES = new String[] {
-        "template0001style1",
-        "template0001style2",
-        "template0001style3",
-        "template0002style1",
-        "template0002style2",
-        "template0002style3",
-        "template0002style4",
-        "template0002style5",
-        "template0002style6",
-        "template0002style7",
-        "template0002style8",
-        "template0002style9",
-        "template0002style10",
-        "template0002style11",
-        "template0002style12",
-        "template0002style13",
-        "template0002style14",
-        "template0002style15",
-        "template0002style16",
-        "template0002style19",
-        "template0004style1",
-        "template0004style2",
-        "template0004style3",
-        "template0004style4",
-        "template0004style5",
-        "template0004style6",
-        "template0004style7",
-        "template0004style8",
-        "template0005style1",
-        "template0005style2",
-        "template0006style1",
-        "template0010style1",
-        "template0012style1",
-        "template9999style1",
+            "template0001style1",  // Replaced with blueprint
     };
 
     private static String[] IMAGE_FITS = new String[]{
-            "Default",
-            "Stretch",
-            "Meet",
-            "Slice",
+            "Image Fit: Default",
+            "Image Fit: Stretch",
+            "Image Fit: Meet",
+            "Image Fit: Slice",
+    };
+
+    private static String[] JOINS = new String[]{
+            "Join: Default",
+            "Join: None",
+            "Join: Horizontal",
+            "Join: Vertical",
+            "Join: Right",
+            "Join: Left",
+    };
+
+    private static int[] JOIN_VALUES = new int[]{
+            Skin.JOIN_DEFAULT,
+            Skin.JOIN_NONE,
+            Skin.JOIN_HORIZONTAL,
+            Skin.JOIN_VERTICAL,
+            Skin.JOIN_DIAGONAL_RIGHT,
+            Skin.JOIN_DIAGONAL_LEFT,
     };
 
     public static void launch(Context context) {
@@ -85,18 +74,21 @@ public class RenderActivity extends AppCompatActivity {
     EditText dataEdit;
     PopupChoiceView templateChoice;
     PopupChoiceView fitChoice;
-    ColorPicker borderColor;
-    ColorPicker backgroundColor;
-    ColorPicker maskColor;
-    ColorPicker overlayColor;
-    ColorPicker dataColor;
+    PopupChoiceView joinChoice;
+    ColorPicker colorBorder;
+    ColorPicker colorBackground;
+    ColorPicker colorMask;
+    ColorPicker colorOverlay;
+    ColorPicker colorData;
+    View photoPicker;
+    Bitmap photo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.render_activity);
 
-        Quikkly.getDefaultInstance();  // Check that Quikkly is set up
+        TEMPLATES = Quikkly.getInstance().getTemplateIdentifiers();
 
         setupViews();
         inputChanged();
@@ -104,6 +96,16 @@ public class RenderActivity extends AppCompatActivity {
 
     private void setupViews() {
         renderView = (RenderTagView)findViewById(R.id.render_tag);
+
+        renderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dataString = dataEdit.getText().toString();
+                BigInteger data = TextUtils.isEmpty(dataString) ? BigInteger.ZERO : new BigInteger(dataString);
+                data = data.add(BigInteger.ONE);
+                dataEdit.setText("" + data);
+            }
+        });
 
         templateChoice = (PopupChoiceView)findViewById(R.id.render_template);
         templateChoice.setTitle("Template");
@@ -114,6 +116,11 @@ public class RenderActivity extends AppCompatActivity {
         fitChoice.setTitle("Image Fit");
         fitChoice.setChoices(IMAGE_FITS);
         fitChoice.setSelectedChangedListener(selectedChangedListener);
+
+        joinChoice = (PopupChoiceView)findViewById(R.id.render_join);
+        joinChoice.setTitle("Data Dot Join");
+        joinChoice.setChoices(JOINS);
+        joinChoice.setSelectedChangedListener(selectedChangedListener);
 
         dataEdit = (EditText)findViewById(R.id.render_data);
         dataEdit.addTextChangedListener(new TextWatcher() {
@@ -133,47 +140,127 @@ public class RenderActivity extends AppCompatActivity {
             }
         });
 
-        borderColor = (ColorPicker)findViewById(R.id.render_border_color);
-        backgroundColor = (ColorPicker)findViewById(R.id.render_background_color);
-        maskColor = (ColorPicker)findViewById(R.id.render_mask_color);
-        overlayColor = (ColorPicker)findViewById(R.id.render_overlay_color);
-        dataColor = (ColorPicker)findViewById(R.id.render_data_color);
-        borderColor.setColor(0xff000000);
-        backgroundColor.setColor(0xff2196F3);
-        maskColor.setColor(0xff2196F3);
-        overlayColor.setColor(0xffffffff);
-        dataColor.setColor(0xffffffff);
+        colorBorder = (ColorPicker)findViewById(R.id.render_color_border);
+        colorBackground = (ColorPicker)findViewById(R.id.render_color_background);
+        colorMask = (ColorPicker)findViewById(R.id.render_color_mask);
+        colorOverlay = (ColorPicker)findViewById(R.id.render_color_overlay);
+        colorData = (ColorPicker)findViewById(R.id.render_color_data);
 
-        for (ColorPicker p : new ColorPicker[] { borderColor, backgroundColor, maskColor, overlayColor, dataColor }) {
+        colorBorder.setColor(0xff000000);
+        colorBackground.setColor(0xff999999);
+        colorMask.setColor(0xffffffff);
+        colorOverlay.setColor(0xff000000);
+        colorData.setColor(0xff000000);
+
+        for (ColorPicker p : new ColorPicker[] { colorBorder, colorBackground, colorMask, colorOverlay, colorData }) {
             p.setFragmentManager(getSupportFragmentManager());
             p.setColorChangedListener(colorChangedListener);
         }
 
+        photoPicker = findViewById(R.id.render_image);
+
+        photoPicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, PHOTO_REQUEST);
+            }
+        });
     }
 
     private void inputChanged() {
-        String template = "template0001style2";//TEMPLATES[templateChoice.getSelected()];
+        String template = TEMPLATES[templateChoice.getSelected()];
 
         String dataString = dataEdit.getText().toString();
         BigInteger data = TextUtils.isEmpty(dataString) ? BigInteger.ZERO : new BigInteger(dataString);
 
-        Skin skin = new Skin();
-        skin.backgroundColor = backgroundColor.getColorHtmlHex();
-        skin.borderColor = borderColor.getColorHtmlHex();
-        skin.maskColor = maskColor.getColorHtmlHex();
-        skin.overlayColor = overlayColor.getColorHtmlHex();
-        skin.dataColor = dataColor.getColorHtmlHex();
         try {
-            skin.imageUrl = readAndBase64EncodeFromAssets(this, "grid.jpg");
-            skin.logoUrl = readAndBase64EncodeFromAssets(this, "quikkly.png");
-        } catch (IOException e) {
-            Log.e(Quikkly.TAG, "Cannot read image files from assets", e);
-        }
-        // TODO: consider separate image fit inputs.
-        skin.imageFit = fitChoice.getSelected();
-        skin.logoFit = fitChoice.getSelected();
+            AndroidSkinBuilder sb = new AndroidSkinBuilder()
+                    .setBorderColor(colorBorder.getColorHtmlHex())
+                    .setBackgroundColor(colorBackground.getColorHtmlHex())
+                    .setOverlayColor(colorOverlay.getColorHtmlHex())
+                    .setMaskColor(colorMask.getColorHtmlHex())
+                    .setImageFit(fitChoice.getSelected())
+                    .setLogoFit(fitChoice.getSelected())
+                    //.setAssetsLogo(this, "q.png")
+                    .setDotJoin(JOIN_VALUES[joinChoice.getSelected()]);
+            if (photo == null) {
+                if (!template.startsWith("template0077")) {
 
-        renderView.setAll(template, data, skin);
+                    sb.setAssetsImage(this, "quikkly.png");
+                }
+            } else {
+                sb.setImage(photo);
+                //sb.setAssetsImage(this, "quikkly.png");
+            }
+
+            if (template.startsWith("template0079")) {
+                sb.setDataColors(new String[]{
+                        "#ffffff",
+                        "#333333",
+                });
+            } else if (template.startsWith("template0098")) {
+                sb.setDataColors(new String[]{
+                        "#000000",
+                        "#aaaaaa",
+                });
+            } else if (!template.startsWith("template0080")) {
+                sb.setDataColors(new String[]{
+                        colorData.getColorHtmlHex(),
+                });
+            }
+
+            renderView.setAll(template, data, sb.build());
+        } catch (IOException e) {
+            Log.e(Quikkly.TAG, "Cannot read image file", e);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PHOTO_REQUEST) {
+            photo = null;
+            if (resultCode == RESULT_OK && data != null) {
+                Uri contentURI = data.getData();
+                try {
+                    photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                } catch (IOException e) {
+                }
+            }
+            inputChanged();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.render, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_export_svg:
+                String svg = renderView.getGeneratedSvg();
+                if (!TextUtils.isEmpty(svg)) {
+                    Export.exportSvg(RenderActivity.this, dataEdit.getText().toString(), svg);
+                } else {
+                    Toast.makeText(RenderActivity.this, "No generated SVG", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+
+            case R.id.action_export_png:
+                Bitmap bitmap = renderView.getGeneratedBitmap();
+                if (bitmap != null) {
+                    Export.exportPng(RenderActivity.this, dataEdit.getText().toString(), bitmap);
+                } else {
+                    Toast.makeText(RenderActivity.this, "No generated bitmap", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private PopupChoiceView.SelectedChangedListener selectedChangedListener = new PopupChoiceView.SelectedChangedListener() {
@@ -189,24 +276,4 @@ public class RenderActivity extends AppCompatActivity {
             inputChanged();
         }
     };
-
-    private String readAndBase64EncodeFromAssets(Context context, String assetsFile) throws IOException {
-        String mime;
-        if (assetsFile.toLowerCase().endsWith(".png"))
-            mime = "image/png";
-        else if (assetsFile.toLowerCase().endsWith(".jpg") || assetsFile.toLowerCase().endsWith(".jpeg"))
-            mime = "image/jpeg";
-        else
-            throw new IllegalArgumentException("Unknown image file extension, cannot determine mime type: " + assetsFile);
-
-        AssetManager am = context.getAssets();
-        InputStream stream = am.open(assetsFile, AssetManager.ACCESS_STREAMING);
-        try {
-            byte[] bytes = IOUtils.toByteArray(stream);
-            String dataUri = "data:" + mime + ";base64," + Base64.encodeToString(bytes, Base64.DEFAULT);
-            return dataUri;
-        } finally {
-            stream.close();
-        }
-    }
 }

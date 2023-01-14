@@ -17,6 +17,6 @@
         android:layout_marginRight="16dp"
         />
 
-   <include layout="@layout/render_activity_controls" />
+    <include layout="@layout/render_activity_controls" />
 
 </LinearLayout>
