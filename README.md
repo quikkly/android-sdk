@@ -1,7 +1,7 @@
 ![Quikkly SDK for Android BETA](https://github.com/quikkly/android-sdk/blob/master/banner.png?raw=true)
 
 ![Build Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Latest Version](https://img.shields.io/badge/version-1.2.2-green.svg)
+![Latest Version](https://img.shields.io/badge/version-3.4.18-green.svg)
 ![Gradle Compatible](https://img.shields.io/badge/gradle-compatible-green.svg)
 [![Website](https://img.shields.io/badge/quikkly.io-developers-5cb8a7.svg)](https://developers.quikkly.io)
 
